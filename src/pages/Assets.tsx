@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, Plus, ArrowUpDown, UserPlus, RotateCcw } from 'lucide-react';
+import { MoreHorizontal, Plus, ArrowUpDown, UserPlus, RotateCcw, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/ui/page-header';
 import { DataTable } from '@/components/ui/data-table';
@@ -104,7 +105,12 @@ const columns: ColumnDef<AssetWithProduct>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>View Details</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a href={`/assets/${asset.id}`}>
+                <Eye className="w-4 h-4 mr-2" />
+                View Details
+              </a>
+            </DropdownMenuItem>
             <DropdownMenuItem>Edit Asset</DropdownMenuItem>
             <DropdownMenuSeparator />
             {canAssign && (
@@ -120,7 +126,9 @@ const columns: ColumnDef<AssetWithProduct>[] = [
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View History</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a href={`/assets/${asset.id}`}>View History</a>
+            </DropdownMenuItem>
             <DropdownMenuItem>Service Tickets</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -130,6 +138,7 @@ const columns: ColumnDef<AssetWithProduct>[] = [
 ];
 
 export default function Assets() {
+  const navigate = useNavigate();
   const assetsWithProducts = getAssetsWithProducts();
 
   return (
@@ -149,6 +158,7 @@ export default function Assets() {
         data={assetsWithProducts}
         searchKey="tagNumber"
         searchPlaceholder="Search by tag number..."
+        onRowClick={(row) => navigate(`/assets/${row.id}`)}
       />
     </div>
   );
